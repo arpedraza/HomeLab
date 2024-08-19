@@ -1,0 +1,29 @@
+name: Deploy VMs to Proxmox
+
+on:
+    push:
+      branches:
+        - main
+      paths:
+        - 'HomeLab/Terraform/Proxmox/PVE1/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.MATRIX_SSH_PRIVATE_KEY }}
+
+    - name: Run Terraform on Matrix
+      run: |
+        ssh -o StrictHostKeyChecking=no ${{ secrets.MATRIX_USER }}@${{ secrets.MATRIX_IP }} << EOF
+          cd ~/HomeLab/Terraform/Proxmox/PVE1
+          terraform init
+          terraform apply -auto-approve
+        EOF
