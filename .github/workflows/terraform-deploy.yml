@@ -5,7 +5,7 @@ on:
       branches:
         - main
       paths:
-        - 'HomeLab/Terraform/Proxmox/PVE1/**'
+        - 'HomeLab/Terraform/Proxmox/PVE1/*'
 
 jobs:
   deploy:
